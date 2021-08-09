@@ -8,9 +8,17 @@ namespace GameAI
   {
     public class Boid
     {
+      static public float MinSpeed = 0.1f;
+      static public float MaxSpeed = 1.0f;
+
       public Vector3 mPosition;
       public Vector3 mVelocity;
-      public Quaternion mRotation;
+
+      public void Step(float dt)
+      {
+        // check if there is an onstacle infront.
+
+      }
     }
 
     public class Flock
@@ -47,7 +55,6 @@ namespace GameAI
         {
           Boid boid = new Boid();
           boid.mPosition = GetRandom(mBounds.min, mBounds.max);
-          boid.mRotation = GetRandom();
           boid.mVelocity = GetRandom(Vector3.zero, Vector3.one);
           boid.mVelocity *= Random.Range(0.0f, mMaxSpeed);
 

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Autonomous : MonoBehaviour
 {
-  Vector3 TargetPos;
+  public Vector3 TargetPos;
   float mWaitTillNextTargetGen = 10.0f;
   [SerializeField]
   Bounds Bound = new Bounds(Vector3.zero, Vector3.one * 5.0f);
@@ -19,16 +19,18 @@ public class Autonomous : MonoBehaviour
   float MaxSpeed = 10.0f;
   //float mCurrentSpeed = 0.0f;
 
+  public Vector3 TargetDirection = Vector3.zero;
+
   // Start is called before the first frame update
   void Start()
   {
     //StartCoroutine(Coroutine_GenerateRandomTarget());
-    StartCoroutine(Coroutine_GenerateTargetInFront());
+    //StartCoroutine(Coroutine_GenerateTargetInFront());
     StartCoroutine(Coroutine_CheckNearBorder());
   }
 
   // Update is called once per frame
-  void Update()
+  public void Update()
   {
     Vector3 targetDirection = (TargetPos - transform.position).normalized;
     Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
@@ -40,13 +42,28 @@ public class Autonomous : MonoBehaviour
 
     Vector3 pos = transform.forward * MaxSpeed *Time.deltaTime;
     transform.position += pos;
+
+    //TargetPos_Viz.transform.position = TargetPos;
   }
+
+  //private void Update()
+  //{
+  //  Quaternion targetRotation = Quaternion.LookRotation(TargetDirection);
+
+  //  if (Quaternion.Angle(transform.rotation, targetRotation) > 0.01f)
+  //  {
+  //    transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, RotationSpeed * Time.deltaTime);
+  //  }
+
+  //  Vector3 pos = transform.forward * MaxSpeed * Time.deltaTime;
+  //  transform.position += pos;
+  //}
 
   private void FixedUpdate()
   {
   }
 
-  Vector3 GetRandom(Vector3 min, Vector3 max)
+  static public Vector3 GetRandom(Vector3 min, Vector3 max)
   {
     return new Vector3(Random.Range(min.x, max.x), Random.Range(min.y, max.y), Random.Range(min.z, max.z));
   }
@@ -58,7 +75,6 @@ public class Autonomous : MonoBehaviour
     while(true)
     {
       TargetPos = GetRandom(Vector3.zero, new Vector3(50.0f, 50.0f, 50.0f));
-      TargetPos_Viz.transform.position = TargetPos;
       Debug.Log(TargetPos.ToString());
       yield return new WaitForSeconds(mWaitTillNextTargetGen);
     }
@@ -71,7 +87,7 @@ public class Autonomous : MonoBehaviour
     while (true)
     {
       TargetPos += transform.forward * 10.0f;
-      TargetPos_Viz.transform.position = TargetPos;
+      //TargetPos_Viz.transform.position = TargetPos;
       Debug.Log(TargetPos.ToString());
       yield return new WaitForSeconds(2);
     }

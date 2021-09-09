@@ -29,6 +29,7 @@ public class FlockBehaviour : MonoBehaviour
   public bool UseSeparation = true;
   public float SeparationWeight = 1.0f;
   public float SeparationDistance = 5.0f;
+  public float Visibility = 20.0f;
 
   // Start is called before the first frame update
   void Start()
@@ -78,6 +79,11 @@ public class FlockBehaviour : MonoBehaviour
     mAutonomous.Add(veh);
   }
 
+  static float Distance(Autonomous a1, Autonomous a2)
+  {
+    return (a1.transform.position - a2.transform.position).magnitude;
+  }
+
   IEnumerator Coroutine_Cohesion(float duration = 1.0f)
   {
     while (true)
@@ -86,23 +92,28 @@ public class FlockBehaviour : MonoBehaviour
       {
         for (int i = 0; i < mAutonomous.Count; ++i)
         {
+          int count = 0;
           Vector3 steerPos = Vector3.zero;
           for (int j = 0; j < mAutonomous.Count; ++j)
           {
-            if (i != j)
+            if (i != j && Distance(mAutonomous[i], mAutonomous[j]) < Visibility)
             {
               steerPos += mAutonomous[j].transform.position;
+              count++;
             }
           }
-          steerPos = steerPos / (NumBoids - 1);
+          if (count > 0)
+          {
+            steerPos = steerPos / count;
 
-          mAutonomous[i].TargetPos = steerPos;
-          Vector3 targetDirection = (steerPos - mAutonomous[i].transform.position).normalized;
-          mAutonomous[i].TargetDirection += targetDirection * CohesionWeight;
-          mAutonomous[i].TargetDirection /= 2.0f;
+            mAutonomous[i].TargetPos = steerPos;
+            Vector3 targetDirection = (steerPos - mAutonomous[i].transform.position).normalized;
+            mAutonomous[i].TargetDirection += targetDirection * CohesionWeight;
+            mAutonomous[i].TargetDirection /= 2.0f;
 
-          float speed = (steerPos - mAutonomous[i].transform.position).magnitude / 2.0f;
-          mAutonomous[i].TargetSpeed += speed * CohesionWeight;
+            float speed = (steerPos - mAutonomous[i].transform.position).magnitude / 2.0f;
+            mAutonomous[i].TargetSpeed += speed * CohesionWeight;
+          }
         }
         yield return new WaitForSeconds(duration);
       }
@@ -119,21 +130,26 @@ public class FlockBehaviour : MonoBehaviour
         {
           Vector3 flockDir = Vector3.zero;
           float speed = 0.0f;
+          int count = 0;
           for (int j = 0; j < mAutonomous.Count; ++j)
           {
-            if (i != j)
+            if (i != j && Distance(mAutonomous[i], mAutonomous[j]) < Visibility)
             {
               speed += mAutonomous[j].Speed;
               flockDir += mAutonomous[j].transform.right;
+              count++;
             }
           }
-          speed = speed / (NumBoids - 1);
-          flockDir = flockDir / (NumBoids - 1);
-          flockDir.Normalize();
+          if (count > 0)
+          {
+            speed = speed / count;
+            flockDir = flockDir / count;
+            flockDir.Normalize();
 
-          mAutonomous[i].TargetSpeed += speed * AlignmentWeight;
-          mAutonomous[i].TargetDirection += flockDir * AlignmentWeight;
-          mAutonomous[i].TargetDirection /= 2.0f;
+            mAutonomous[i].TargetSpeed += speed * AlignmentWeight;
+            mAutonomous[i].TargetDirection += flockDir * AlignmentWeight;
+            mAutonomous[i].TargetDirection /= 2.0f;
+          }
         }
         yield return new WaitForSeconds(duration);
       }
@@ -187,30 +203,6 @@ public class FlockBehaviour : MonoBehaviour
         yield return new WaitForSeconds(duration);
       }
       yield return null;
-    }
-  }
-
-  void Rule_Cohesion(float weight = 1.0f)
-  {
-    for (int i = 0; i < mAutonomous.Count; ++i)
-    {
-      Vector3 steerPos = Vector3.zero;
-      for (int j = 0; j < mAutonomous.Count; ++j)
-      {
-        if (i != j)
-        {
-          steerPos += mAutonomous[j].transform.position;
-        }
-      }
-      steerPos = steerPos / (NumBoids - 1);
-
-      mAutonomous[i].TargetPos = steerPos;
-      Vector3 targetDirection = (steerPos - mAutonomous[i].transform.position).normalized;
-      mAutonomous[i].TargetDirection += targetDirection * weight;
-
-      float speed = (steerPos - mAutonomous[i].transform.position).magnitude / 10.0f;
-      mAutonomous[i].TargetSpeed += speed * weight;
-      mAutonomous[i].TargetSpeed /= 2.0f;
     }
   }
 

@@ -45,19 +45,6 @@ public class FlockBehaviour2 : MonoBehaviour
   List<Boid> boids = new List<Boid>();
   List<GameObject> boidObjects = new List<GameObject>();
 
-  //function initBoids()
-  //{
-  //  for (var i = 0; i < numBoids; i += 1)
-  //  {
-  //    boids[boids.length] = {
-  //    x: Math.random() * width,
-  //    y: Math.random() * height,
-  //    dx: Math.random() * 10 - 5,
-  //    dy: Math.random() * 10 - 5,
-  //    history: [],
-  //  };
-  //  }
-  //}
   private void Start()
   {
     for(int i = 0; i < numBoids; ++i)

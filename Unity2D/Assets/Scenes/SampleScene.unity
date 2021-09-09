@@ -176,7 +176,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 60
+  orthographic size: 120
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -284,7 +284,7 @@ Transform:
   m_GameObject: {fileID: 735960361}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 100, y: 100, z: 1}
+  m_LocalScale: {x: 200, y: 200, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
@@ -340,23 +340,31 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 875704703}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a70ef59591ab02c408ce0a83df2727c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NumBoids: 10
+  NumBoids: 100
   PrefabBoid: {fileID: 549526264327258702, guid: cfe59db30b3da1b4abca6996405c4cf8, type: 3}
   Bounds: {fileID: 735960364}
-  UseRandom: 0
+  UseRandom: 1
   RandomWeight: 1
-  UseAlignment: 0
-  AlignmentWeight: 1
-  UseCohesion: 0
-  CohesionWeight: 1
-  UseSeparation: 0
-  SeparationWeight: 1
+  UseAlignment: 1
+  AlignmentWeight: 2
+  UseCohesion: 1
+  CohesionWeight: 3
+  UseSeparation: 1
+  SeparationWeight: 5
   SeparationDistance: 2
+  Visibility: 40
+  TickDurationCohesion: 0.1
+  TickDurationSeparation: 0.1
+  TickDurationAlignment: 0.1
+  TickDurationRandom: 1
+  BounceWall: 0
+  MaxRotationSpeed: 200
+  MaxSpeed: 15
 --- !u!4 &875704705
 Transform:
   m_ObjectHideFlags: 0
@@ -378,15 +386,15 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 875704703}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 442a06d5ff711e144b704f2eec284f6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   BoidPrefab: {fileID: 1657217710358902174, guid: 51b25294f092675498706509c2bc5a43, type: 3}
-  speedLimit: 0.5
-  width: 100
-  height: 100
+  speedLimit: 1
+  width: 200
+  height: 200
   numBoids: 100
   visualRange: 15
   minDistance: 2

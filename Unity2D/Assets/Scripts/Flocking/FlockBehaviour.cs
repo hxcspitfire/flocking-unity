@@ -5,6 +5,7 @@ using UnityEngine;
 public class FlockBehaviour : MonoBehaviour
 {
   List<Autonomous> mAutonomous = new List<Autonomous>();
+
   [SerializeField]
   int NumBoids = 10;
 
@@ -14,22 +15,27 @@ public class FlockBehaviour : MonoBehaviour
   [SerializeField]
   BoxCollider2D Bounds;
 
-  //[SerializeField]
-  //GameObject SteerPos_Viz;
-
-  //private List<float> mSpeed = new List<float>();
-  //private List<Vector3> mDirection = new List<Vector3>();
   public bool UseRandom = true;
   public float RandomWeight = 1.0f;
   public bool UseAlignment = true;
   public float AlignmentWeight = 1.0f;
   public bool UseCohesion = true;
   public float CohesionWeight = 1.0f;
-  //public bool UseAlignSpeed = true;
   public bool UseSeparation = true;
   public float SeparationWeight = 1.0f;
   public float SeparationDistance = 5.0f;
   public float Visibility = 20.0f;
+  public float TickDurationCohesion = 1.0f;
+  public float TickDurationSeparation = 1.0f;
+  public float TickDurationAlignment = 1.0f;
+  public float TickDurationRandom = 1.0f;
+  public bool BounceWall = true;
+
+  [SerializeField]
+  float MaxRotationSpeed = 100.0f;
+
+  [SerializeField]
+  float MaxSpeed = 10.0f;
 
   // Start is called before the first frame update
   void Start()
@@ -43,9 +49,11 @@ public class FlockBehaviour : MonoBehaviour
       Autonomous veh = obj.GetComponent<Autonomous>();
       veh.Bound = Bounds;
       mAutonomous.Add(veh);
+      veh.MaxSpeed = MaxSpeed;
+      veh.MaxRotationSpeed = MaxRotationSpeed;
     }
 
-    StartCoroutine(Coroutine_Separation(0.5f));
+    StartCoroutine(Coroutine_Separation());
     StartCoroutine(Coroutine_Cohesion());
     StartCoroutine(Coroutine_Alignment());
     StartCoroutine(Coroutine_Random());
@@ -54,6 +62,11 @@ public class FlockBehaviour : MonoBehaviour
   // Update is called once per frame
   void Update()
   {
+    for(int i = 0; i < mAutonomous.Count; ++i)
+    {
+      mAutonomous[i].MaxRotationSpeed = MaxRotationSpeed;
+      mAutonomous[i].MaxSpeed = MaxSpeed;
+    }
     HandleInputs();
     Rule_CrossBorder();
   }
@@ -77,6 +90,8 @@ public class FlockBehaviour : MonoBehaviour
     Autonomous veh = obj.GetComponent<Autonomous>();
     veh.Bound = Bounds;
     mAutonomous.Add(veh);
+    veh.MaxSpeed = MaxSpeed;
+    veh.MaxRotationSpeed = MaxRotationSpeed;
   }
 
   static float Distance(Autonomous a1, Autonomous a2)
@@ -84,7 +99,7 @@ public class FlockBehaviour : MonoBehaviour
     return (a1.transform.position - a2.transform.position).magnitude;
   }
 
-  IEnumerator Coroutine_Cohesion(float duration = 1.0f)
+  IEnumerator Coroutine_Cohesion()
   {
     while (true)
     {
@@ -113,14 +128,15 @@ public class FlockBehaviour : MonoBehaviour
 
             float speed = (steerPos - mAutonomous[i].transform.position).magnitude / 2.0f;
             mAutonomous[i].TargetSpeed += speed * CohesionWeight;
+            mAutonomous[i].TargetSpeed /= 2.0f;
           }
         }
-        yield return new WaitForSeconds(duration);
+        yield return new WaitForSeconds(TickDurationCohesion);
       }
       yield return null;
     }
   }
-  IEnumerator Coroutine_Alignment(float duration = 1.0f)
+  IEnumerator Coroutine_Alignment()
   {
     while (true)
     {
@@ -147,16 +163,17 @@ public class FlockBehaviour : MonoBehaviour
             flockDir.Normalize();
 
             mAutonomous[i].TargetSpeed += speed * AlignmentWeight;
+            mAutonomous[i].TargetSpeed /= 2.0f;
             mAutonomous[i].TargetDirection += flockDir * AlignmentWeight;
             mAutonomous[i].TargetDirection /= 2.0f;
           }
         }
-        yield return new WaitForSeconds(duration);
+        yield return new WaitForSeconds(TickDurationAlignment);
       }
       yield return null;
     }
   }
-  IEnumerator Coroutine_Separation(float duration = 1.0f)
+  IEnumerator Coroutine_Separation()
   {
     while (true)
     {
@@ -177,19 +194,19 @@ public class FlockBehaviour : MonoBehaviour
                   mAutonomous[i].transform.position - 
                   mAutonomous[j].transform.position).normalized;
                 mAutonomous[i].TargetDirection += targetDirection * SeparationWeight;
-                mAutonomous[i].TargetDirection /= 2.0f;
-                mAutonomous[i].TargetSpeed += dist/2.0f * CohesionWeight;
-
+                //mAutonomous[i].TargetDirection /= 2.0f;
+                mAutonomous[i].TargetSpeed += dist * SeparationWeight;
+                mAutonomous[i].TargetSpeed /= 2.0f;
               }
             }
           }
         }
-        yield return new WaitForSeconds(duration);
+        yield return new WaitForSeconds(TickDurationSeparation);
       }
       yield return null;
     }
   }
-  IEnumerator Coroutine_Random(float duration = 3.0f)
+  IEnumerator Coroutine_Random()
   {
     while (true)
     {
@@ -199,8 +216,9 @@ public class FlockBehaviour : MonoBehaviour
         {
           float speed = Random.Range(1.0f, mAutonomous[i].MaxSpeed);
           mAutonomous[i].TargetSpeed += speed * RandomWeight;
+          mAutonomous[i].TargetSpeed /= 2.0f;
         }
-        yield return new WaitForSeconds(duration);
+        yield return new WaitForSeconds(TickDurationRandom);
       }
       yield return null;
     }
@@ -208,26 +226,57 @@ public class FlockBehaviour : MonoBehaviour
 
   void Rule_CrossBorder()
   {
-    for (int i = 0; i < mAutonomous.Count; ++i)
+    if (BounceWall)
     {
-      Vector3 pos = mAutonomous[i].transform.position;
-      if (mAutonomous[i].transform.position.x > Bounds.bounds.max.x)
+      for (int i = 0; i < mAutonomous.Count; ++i)
       {
-        pos.x = Bounds.bounds.min.x;
+        Vector3 pos = mAutonomous[i].transform.position;
+        if (mAutonomous[i].transform.position.x > Bounds.bounds.max.x)
+        {
+          //pos.x = Bounds.bounds.min.x;
+          mAutonomous[i].TargetDirection.x = -mAutonomous[i].TargetDirection.x;
+        }
+        if (mAutonomous[i].transform.position.x < Bounds.bounds.min.x)
+        {
+          //pos.x = Bounds.bounds.max.x;
+          mAutonomous[i].TargetDirection.x = -mAutonomous[i].TargetDirection.x;
+        }
+        if (mAutonomous[i].transform.position.y > Bounds.bounds.max.y)
+        {
+          //pos.y = Bounds.bounds.min.y;
+          mAutonomous[i].TargetDirection.y = -mAutonomous[i].TargetDirection.y;
+        }
+        if (mAutonomous[i].transform.position.y < Bounds.bounds.min.y)
+        {
+          //pos.y = Bounds.bounds.max.y;
+          mAutonomous[i].TargetDirection.y = -mAutonomous[i].TargetDirection.y;
+        }
+        mAutonomous[i].transform.position = pos;
       }
-      if (mAutonomous[i].transform.position.x < Bounds.bounds.min.x)
+    }
+    else
+    {
+      for (int i = 0; i < mAutonomous.Count; ++i)
       {
-        pos.x = Bounds.bounds.max.x;
+        Vector3 pos = mAutonomous[i].transform.position;
+        if (mAutonomous[i].transform.position.x > Bounds.bounds.max.x)
+        {
+          pos.x = Bounds.bounds.min.x;
+        }
+        if (mAutonomous[i].transform.position.x < Bounds.bounds.min.x)
+        {
+          pos.x = Bounds.bounds.max.x;
+        }
+        if (mAutonomous[i].transform.position.y > Bounds.bounds.max.y)
+        {
+          pos.y = Bounds.bounds.min.y;
+        }
+        if (mAutonomous[i].transform.position.y < Bounds.bounds.min.y)
+        {
+          pos.y = Bounds.bounds.max.y;
+        }
+        mAutonomous[i].transform.position = pos;
       }
-      if (mAutonomous[i].transform.position.y > Bounds.bounds.max.y)
-      {
-        pos.y = Bounds.bounds.min.y;
-      }
-      if (mAutonomous[i].transform.position.y < Bounds.bounds.min.y)
-      {
-        pos.y = Bounds.bounds.max.y;
-      }
-      mAutonomous[i].transform.position = pos;
     }
   }
 }

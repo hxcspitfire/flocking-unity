@@ -10,7 +10,7 @@ public class Autonomous : MonoBehaviour
   [SerializeField]
   GameObject TargetPos_Viz;
 
-  [SerializeField]
+  public
   float MaxRotationSpeed = 100.0f;
 
   public float MaxSpeed = 10.0f;

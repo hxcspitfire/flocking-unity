@@ -70,7 +70,7 @@ public class FlockBehaviour : MonoBehaviour
       veh.Bound = Bounds;
       mAutonomous.Add(veh);
       veh.MaxSpeed = MaxSpeed;
-      veh.MaxRotationSpeed = MaxRotationSpeed;
+      veh.RotationSpeed = MaxRotationSpeed;
     }
 
     for(int i = 0; i < NumEnemyBoids; ++i)
@@ -97,7 +97,7 @@ public class FlockBehaviour : MonoBehaviour
   {
     for(int i = 0; i < mAutonomous.Count; ++i)
     {
-      mAutonomous[i].MaxRotationSpeed = MaxRotationSpeed;
+      mAutonomous[i].RotationSpeed = MaxRotationSpeed;
       mAutonomous[i].MaxSpeed = MaxSpeed;
     }
     HandleInputs();
@@ -139,7 +139,6 @@ public class FlockBehaviour : MonoBehaviour
     veh.Bound = Bounds;
     mAutonomous.Add(veh);
     veh.MaxSpeed = MaxSpeed;
-    veh.MaxRotationSpeed = MaxRotationSpeed;
   }
 
   void AddEnemy(Vector2 pt)
@@ -151,7 +150,7 @@ public class FlockBehaviour : MonoBehaviour
     veh.Bound = Bounds;
     mEnemies.Add(veh);
     veh.MaxSpeed = MaxSpeedEnemy;
-    veh.MaxRotationSpeed = MaxRotationSpeedEnemy;
+    veh.RotationSpeed = MaxRotationSpeedEnemy;
   }
 
   void AddObstacle(Vector2 pt)
@@ -163,7 +162,6 @@ public class FlockBehaviour : MonoBehaviour
     veh.Bound = Bounds;
     mObstacles.Add(veh);
     veh.MaxSpeed = 0.0f;
-    veh.MaxRotationSpeed = 0.0f;
   }
 
   static float Distance(Autonomous a1, Autonomous a2)
@@ -193,7 +191,6 @@ public class FlockBehaviour : MonoBehaviour
           {
             steerPos = steerPos / count;
 
-            autonomousList[i].TargetPos = steerPos;
             Vector3 targetDirection = (steerPos - autonomousList[i].transform.position).normalized;
             autonomousList[i].TargetDirection += targetDirection * weight;
             autonomousList[i].TargetDirection /= 2.0f;

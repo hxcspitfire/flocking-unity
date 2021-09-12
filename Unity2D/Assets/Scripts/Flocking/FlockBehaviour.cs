@@ -6,7 +6,7 @@ public class FlockBehaviour : MonoBehaviour
 {
   List<Autonomous> mAutonomous = new List<Autonomous>();
   List<Autonomous> mEnemies = new List<Autonomous>();
-  List<Autonomous> mObstacles = new List<Autonomous>();
+  List<Obstacle> mObstacles = new List<Obstacle>();
 
   [SerializeField]
   int NumBoids = 10;
@@ -18,7 +18,7 @@ public class FlockBehaviour : MonoBehaviour
   [SerializeField]
   GameObject PrefabEnemyBoid;
   [SerializeField]
-  GameObject PrefabObstacle;
+  GameObject[] PrefabObstacles;
 
   [SerializeField]
   BoxCollider2D Bounds;
@@ -155,13 +155,11 @@ public class FlockBehaviour : MonoBehaviour
 
   void AddObstacle(Vector2 pt)
   {
-    GameObject obj = Instantiate(PrefabObstacle);
+    GameObject obj = Instantiate(PrefabObstacles[Random.Range(0, PrefabObstacles.Length)]);
     obj.name = "Obstacle_" + mObstacles.Count;
     obj.transform.position = new Vector3(pt.x, pt.y, 0.0f);
-    Autonomous veh = obj.GetComponent<Autonomous>();
-    veh.Bound = Bounds;
+    Obstacle veh = obj.GetComponent<Obstacle>();
     mObstacles.Add(veh);
-    veh.MaxSpeed = 0.0f;
   }
 
   static float Distance(Autonomous a1, Autonomous a2)
@@ -192,8 +190,10 @@ public class FlockBehaviour : MonoBehaviour
             steerPos = steerPos / count;
 
             Vector3 targetDirection = (steerPos - autonomousList[i].transform.position).normalized;
-            autonomousList[i].TargetDirection += targetDirection * weight;
-            autonomousList[i].TargetDirection /= 2.0f;
+            //autonomousList[i].TargetDirection += targetDirection * weight;
+            //autonomousList[i].TargetDirection /= 2.0f;
+            autonomousList[i].TargetDirection += targetDirection;
+            autonomousList[i].TargetDirection.Normalize();
 
             float speed = (steerPos - autonomousList[i].transform.position).magnitude / 2.0f;
             autonomousList[i].TargetSpeed += speed * weight;
@@ -233,8 +233,10 @@ public class FlockBehaviour : MonoBehaviour
 
             autonomousList[i].TargetSpeed += speed * weight;
             autonomousList[i].TargetSpeed /= 2.0f;
-            autonomousList[i].TargetDirection += flockDir * weight;
-            autonomousList[i].TargetDirection /= 2.0f;
+            //autonomousList[i].TargetDirection += flockDir * weight;
+            //autonomousList[i].TargetDirection /= 2.0f;
+            autonomousList[i].TargetDirection += flockDir;
+            autonomousList[i].TargetDirection.Normalize();
           }
         }
         yield return new WaitForSeconds(TickDurationAlignment);
@@ -262,7 +264,9 @@ public class FlockBehaviour : MonoBehaviour
                 Vector3 targetDirection = (
                   autonomousList[i].transform.position - 
                   autonomousList[j].transform.position).normalized;
-                autonomousList[i].TargetDirection += targetDirection * weight;
+                //autonomousList[i].TargetDirection += targetDirection * weight;
+                autonomousList[i].TargetDirection += targetDirection;
+                autonomousList[i].TargetDirection.Normalize();
                 //autonomousList[i].TargetDirection /= 2.0f;
                 autonomousList[i].TargetSpeed += dist * weight;
                 autonomousList[i].TargetSpeed /= 2.0f;
@@ -294,7 +298,10 @@ public class FlockBehaviour : MonoBehaviour
                 mAutonomous[i].transform.position -
                 mEnemies[j].transform.position).normalized;
 
-              mAutonomous[i].TargetDirection += targetDirection * SeparationWeightEnemy;
+              //mAutonomous[i].TargetDirection += targetDirection * SeparationWeightEnemy;
+              mAutonomous[i].TargetDirection += targetDirection;
+              mAutonomous[i].TargetDirection.Normalize();
+
               //mAutonomous[i].TargetDirection /= 2.0f;
               mAutonomous[i].TargetSpeed += dist * SeparationWeightEnemy;
               mAutonomous[i].TargetSpeed /= 2.0f;
@@ -319,15 +326,19 @@ public class FlockBehaviour : MonoBehaviour
             float dist = (
               mObstacles[j].transform.position -
               autonomousList[i].transform.position).magnitude;
-            if (dist < ObstacleSeparationDistance)
+            if (dist < mObstacles[j].AvoidanceRadius)
             {
               Vector3 targetDirection = (
                 autonomousList[i].transform.position -
                 mObstacles[j].transform.position).normalized;
+
+              //autonomousList[i].TargetDirection.Normalize();
               autonomousList[i].TargetDirection += targetDirection * weight;
-              //autonomousList[i].TargetDirection /= 2.0f;
-              autonomousList[i].TargetSpeed += dist * weight;
-              autonomousList[i].TargetSpeed /= 2.0f;
+              autonomousList[i].TargetDirection.Normalize();
+
+              // dont change speed with obstancles.
+              //autonomousList[i].TargetSpeed += dist * weight;
+              //autonomousList[i].TargetSpeed /= 2.0f;
             }
           }
         }
@@ -344,6 +355,26 @@ public class FlockBehaviour : MonoBehaviour
       {
         for (int i = 0; i < autonomousList.Count; ++i)
         {
+          float rand = Random.Range(0.0f, 1.0f);
+          autonomousList[i].TargetDirection.Normalize();
+          float angle = Mathf.Atan2(autonomousList[i].TargetDirection.y, autonomousList[i].TargetDirection.x);
+
+          if(rand > 0.5f)
+          {
+            angle += Mathf.Deg2Rad * 45.0f;
+          }
+          else
+          {
+            angle -= Mathf.Deg2Rad * 45.0f;
+          }
+          Vector3 dir = Vector3.zero;
+          dir.x = Mathf.Cos(angle);
+          dir.y = Mathf.Sin(angle);
+
+          autonomousList[i].TargetDirection += dir * weight;
+          autonomousList[i].TargetDirection.Normalize();
+          //Debug.Log(autonomousList[i].TargetDirection);
+
           float speed = Random.Range(1.0f, autonomousList[i].MaxSpeed);
           autonomousList[i].TargetSpeed += speed * weight;
           autonomousList[i].TargetSpeed /= 2.0f;
@@ -358,6 +389,27 @@ public class FlockBehaviour : MonoBehaviour
   {
     if (BounceWall)
     {
+      for (int i = 0; i < autonomousList.Count; ++i)
+      {
+        Vector3 pos = autonomousList[i].transform.position;
+        if (autonomousList[i].transform.position.x + 5.0f> Bounds.bounds.max.x)
+        {
+          autonomousList[i].TargetDirection.x = -1.0f;
+        }
+        if (autonomousList[i].transform.position.x - 5.0f < Bounds.bounds.min.x)
+        {
+          autonomousList[i].TargetDirection.x = 1.0f;
+        }
+        if (autonomousList[i].transform.position.y + 5.0f > Bounds.bounds.max.y)
+        {
+          autonomousList[i].TargetDirection.y = -1.0f;
+        }
+        if (autonomousList[i].transform.position.y - 5.0f < Bounds.bounds.min.y)
+        {
+          autonomousList[i].TargetDirection.y = 1.0f;
+        }
+        autonomousList[i].TargetDirection.Normalize();
+      }
     }
     else
     {

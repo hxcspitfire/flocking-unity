@@ -143,4 +143,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 528663eebd267614fac7f36686452b66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AvoidanceRadiusMultFactor: 1.2
+  AvoidanceRadiusMultFactor: 1.5

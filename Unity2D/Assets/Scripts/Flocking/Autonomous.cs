@@ -18,8 +18,7 @@ public class Autonomous : MonoBehaviour
   public Vector3 TargetDirection = Vector3.zero;
   public float RotationSpeed = 0.0f;
 
-  public BoxCollider2D Bound;
-
+  public SpriteRenderer spriteRenderer;
 
   // Start is called before the first frame update
   void Start()
@@ -40,6 +39,11 @@ public class Autonomous : MonoBehaviour
     Vector2 dir = new Vector2(Mathf.Cos(Mathf.Deg2Rad * angle), Mathf.Sin(Mathf.Deg2Rad * angle));//, 0.0f);
     dir.Normalize();
     TargetDirection = dir;
+  }
+
+  public void SetColor(Color c)
+  {
+    spriteRenderer.color = c;
   }
 
   // Update is called once per frame

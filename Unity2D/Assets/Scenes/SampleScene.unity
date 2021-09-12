@@ -616,17 +616,17 @@ MonoBehaviour:
   Bounds: {fileID: 735960364}
   flocks:
   - name: Boids
-    numBoids: 1
+    numBoids: 100
     isPredator: 0
     colour: {r: 1, g: 1, b: 1, a: 1}
-    maxSpeed: 25
+    maxSpeed: 30
     maxRotationSpeed: 300
     useRandomRule: 1
-    useAlignmentRule: 0
-    useCohesionRule: 0
-    useSeparationRule: 0
-    useFleeOnSightEnemyRule: 0
-    useAvoidObstaclesRule: 0
+    useAlignmentRule: 1
+    useCohesionRule: 1
+    useSeparationRule: 1
+    useFleeOnSightEnemyRule: 1
+    useAvoidObstaclesRule: 1
     weightRandom: 1
     weightAlignment: 2
     weightCohesion: 3
@@ -639,7 +639,7 @@ MonoBehaviour:
     bounceWall: 1
     mAutonomous: []
   - name: Enemies
-    numBoids: 0
+    numBoids: 10
     isPredator: 1
     colour: {r: 0.6792453, g: 0.086507656, b: 0.086507656, a: 1}
     maxSpeed: 20

@@ -6,7 +6,14 @@ public class Autonomous : MonoBehaviour
 {
   public float MaxSpeed = 10.0f;
 
-  public float Speed { get; private set; } = 0.0f;
+  public float Speed
+  {
+    get;
+    private set;
+  } = 0.0f;
+
+  public Vector2 accel = new Vector2(0.0f, 0.0f);
+
   public float TargetSpeed = 0.0f;
   public Vector3 TargetDirection = Vector3.zero;
   public float RotationSpeed = 0.0f;
@@ -29,8 +36,9 @@ public class Autonomous : MonoBehaviour
 
   void SetRandomDirection()
   {
-    float angle = Random.Range(-180.0f, 180.0f);
-    Vector3 dir = new Vector3(Mathf.Cos(Mathf.Deg2Rad * angle), Mathf.Sin(Mathf.Deg2Rad * angle), 0.0f);
+    float angle = 30.0f;// Random.Range(-180.0f, 180.0f);
+    Vector2 dir = new Vector2(Mathf.Cos(Mathf.Deg2Rad * angle), Mathf.Sin(Mathf.Deg2Rad * angle));//, 0.0f);
+    dir.Normalize();
     TargetDirection = dir;
   }
 

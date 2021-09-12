@@ -588,8 +588,6 @@ GameObject:
   m_Component:
   - component: {fileID: 875704705}
   - component: {fileID: 875704704}
-  - component: {fileID: 875704706}
-  - component: {fileID: 875704707}
   m_Layer: 0
   m_Name: FlockBehaviour
   m_TagString: Untagged
@@ -681,60 +679,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &875704706
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 875704703}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 442a06d5ff711e144b704f2eec284f6a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  BoidPrefab: {fileID: 1657217710358902174, guid: 51b25294f092675498706509c2bc5a43, type: 3}
-  speedLimit: 1
-  width: 200
-  height: 200
-  numBoids: 100
-  visualRange: 15
-  minDistance: 2
-  avoidFactor: 0.05
-  matchingFactor: 0.005
-  centeringFactor: 0.005
-  useCohesion: 1
-  useAlignment: 1
-  useSeparation: 1
-  BounceWalls: 1
---- !u!114 &875704707
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 875704703}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 27e08912c88d83e44b39d902b658b5b8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  numBoids: 100
-  width: 100
-  height: 100
-  TickDuration: 0.1
-  option_friend: 1
-  option_crowd: 1
-  option_avoid: 1
-  option_noise: 1
-  option_cohese: 1
-  maxSpeed: 0.1
-  friendRadius: 10
-  crowdRadius: 10
-  avoidRadius: 5
-  coheseRadius: 20
-  BoidPrefab: {fileID: 2695716165399383015, guid: 51b25294f092675498706509c2bc5a43, type: 3}
-  AvoidPrefab: {fileID: 4103128497887921647, guid: 8c1f547f24bf70341b6ec36b8edf72bc, type: 3}
 --- !u!1 &969222975
 GameObject:
   m_ObjectHideFlags: 0

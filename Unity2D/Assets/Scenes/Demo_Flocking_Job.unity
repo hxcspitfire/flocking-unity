@@ -599,7 +599,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 400
+  orthographic size: 100
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1925,12 +1925,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PrefabBoid: {fileID: 1235064867378309434, guid: e1e4c3dfefb8ac844b50df6df04de294, type: 3}
   MaxSpeed: 5
-  BoidCount: 1000
+  BoidCount: 1
   BoidIncrementCount: 1000
-  MinX: -500
-  MaxX: 500
-  MinY: -500
-  MaxY: 500
+  MinX: -100
+  MaxX: 100
+  MinY: -100
+  MaxY: 100
   UiJob: {fileID: 1261648702}
 --- !u!114 &1938681655
 MonoBehaviour:

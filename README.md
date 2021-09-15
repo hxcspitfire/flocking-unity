@@ -1,5 +1,9 @@
+
 # Flocking and Boids Simulation in Unity2D
-> ![Unity](https://img.shields.io/badge/Unity-2020.3.5f1-green) ![C#](https://img.shields.io/badge/%20-C%23-blue)
+> ![Unity](https://img.shields.io/badge/Unity-2020.3.5f1-green) ![C#](https://img.shields.io/badge/%20-C%23-blue)  <a href="#">
+    <img src="https://visitor-badge.glitch.me/badge?page_id=shamim-akhtar.visitor-badge" />        
+  </a>
+
 
 https://user-images.githubusercontent.com/7691849/132988865-edc0c808-ee13-4d49-92de-37e3546aad7d.mp4
 

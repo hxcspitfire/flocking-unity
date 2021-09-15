@@ -72,26 +72,26 @@ public class FlockBehaviour : MonoBehaviour
       return;
     }
 
-    if (Input.GetMouseButtonDown(1))
-    {
-      Vector2 rayPos = new Vector2(
-          Camera.main.ScreenToWorldPoint(Input.mousePosition).x,
-          Camera.main.ScreenToWorldPoint(Input.mousePosition).y);
-      AddBoid(rayPos.x, rayPos.y, flocks[0]);
-    }
-    if (Input.GetMouseButtonDown(0))
+    //if (Input.GetMouseButtonDown(1))
+    //{
+    //  Vector2 rayPos = new Vector2(
+    //      Camera.main.ScreenToWorldPoint(Input.mousePosition).x,
+    //      Camera.main.ScreenToWorldPoint(Input.mousePosition).y);
+    //  AddBoid(rayPos.x, rayPos.y, flocks[3]);
+    //}
+    if (Input.GetMouseButtonDown(2))
     {
       Vector2 rayPos = new Vector2(
           Camera.main.ScreenToWorldPoint(Input.mousePosition).x,
           Camera.main.ScreenToWorldPoint(Input.mousePosition).y);
       AddObstacle(rayPos);
     }
-    if (Input.GetMouseButtonDown(2))
+    if (Input.GetMouseButtonDown(1))
     {
       Vector2 rayPos = new Vector2(
           Camera.main.ScreenToWorldPoint(Input.mousePosition).x,
           Camera.main.ScreenToWorldPoint(Input.mousePosition).y);
-      AddBoid(rayPos.x, rayPos.y, flocks[1]);
+      AddBoid(rayPos.x, rayPos.y, flocks[0]);
     }
   }
 

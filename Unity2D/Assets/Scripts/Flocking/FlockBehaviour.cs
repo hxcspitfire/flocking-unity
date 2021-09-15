@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class FlockBehaviour : MonoBehaviour
 {
@@ -65,6 +66,12 @@ public class FlockBehaviour : MonoBehaviour
 
   void HandleInputs()
   {
+    if (EventSystem.current.IsPointerOverGameObject() ||
+       enabled == false)
+    {
+      return;
+    }
+
     if (Input.GetMouseButtonDown(1))
     {
       Vector2 rayPos = new Vector2(

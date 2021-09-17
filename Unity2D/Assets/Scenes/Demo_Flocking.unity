@@ -746,7 +746,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CameraSizeMin: 1
-  CameraSizeMax: 100
+  CameraSizeMax: 700
+  ZoomMultiplierForButton: 0.00001
   SliderZoom: {fileID: 85686875}
   BtnZoomIn: {fileID: 1335777994}
   BtnZoomOut: {fileID: 766222391}
@@ -777,7 +778,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 60
+  orthographic size: 300
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1010,7 +1011,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.039215688}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -1029,7 +1030,7 @@ Transform:
   m_GameObject: {fileID: 735960361}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 200, y: 100, z: 1}
+  m_LocalScale: {x: 500, y: 500, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
@@ -1184,6 +1185,12 @@ MonoBehaviour:
   - {fileID: 1593730532244549617, guid: 26516c99e7d4b534089bed610647bea1, type: 3}
   - {fileID: 4413616133944599616, guid: 19ce66082a74e0a40ae829e490ac5e8e, type: 3}
   Bounds: {fileID: 735960364}
+  TickDuration: 1
+  TickDurationSeparationEnemy: 0.01
+  TickDurationRandom: 1
+  BoidIncr: 100
+  useFlocking: 1
+  BatchSize: 200
   flocks:
   - name: Boids
     numBoids: 100
@@ -1231,12 +1238,6 @@ MonoBehaviour:
     visibility: 20
     bounceWall: 1
     mAutonomous: []
-  TickDurationCohesion: 0.1
-  TickDurationSeparation: 0.01
-  TickDurationSeparationEnemy: 0.01
-  TickDurationAlignment: 0.1
-  TickDurationRandom: 1
-  TickDurationObstacleSeparation: 0.01
 --- !u!4 &875704705
 Transform:
   m_ObjectHideFlags: 0

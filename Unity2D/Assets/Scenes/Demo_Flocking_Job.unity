@@ -643,6 +643,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CameraSizeMin: 1
   CameraSizeMax: 700
+  ZoomMultiplierForButton: 0.00001
   SliderZoom: {fileID: 1170549199}
   BtnZoomIn: {fileID: 323865064}
   BtnZoomOut: {fileID: 1693484718}
@@ -1923,15 +1924,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3643e91e22b4cf64baee215f207c102c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MAX_BOIDS: 20000
   PrefabBoid: {fileID: 1235064867378309434, guid: e1e4c3dfefb8ac844b50df6df04de294, type: 3}
-  MaxSpeed: 5
+  MaxSpeed: 30
   BoidCount: 1
   BoidIncrementCount: 1000
-  MinX: -100
-  MaxX: 100
-  MinY: -100
-  MaxY: 100
+  MinX: -500
+  MaxX: 500
+  MinY: -500
+  MaxY: 500
   UiJob: {fileID: 1261648702}
+  PrefabObstacles:
+  - {fileID: 6118813194174197815, guid: e0a18350ac4d4e44bbe5c5e1489ca525, type: 3}
+  - {fileID: 1593730532244549617, guid: 26516c99e7d4b534089bed610647bea1, type: 3}
+  useRandomRule: 1
+  useCohesionRule: 1
+  useAlignmentRule: 0
+  useSeparationRule: 1
+  TickDurationRandom: 1
+  TickDuration: 0.1
+  weightCohesion: 10
+  weightAlignment: 5
+  weightSeparation: 2
+  weightAvoidObstacles: 20
+  avoidanceRadiusMultiplier: 1.5
+  visibility: 50
+  separationDistance: 5
+  NumBatches: 4096
 --- !u!114 &1938681655
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -12,6 +12,8 @@ public class CameraManipulator2D : MonoBehaviour
   [SerializeField]
   float CameraSizeMax = 10.0f;
 
+  public float ZoomMultiplierForButton = 0.00001f;
+
   // The slider for zoom-in and zoom-out
   [SerializeField]
   public Slider SliderZoom;
@@ -173,11 +175,11 @@ public class CameraManipulator2D : MonoBehaviour
     // For this demo we hardcode 
     // the increment. You should
     // avoid hardcoding the value.
-    Zoom(mZoomFactor + (CameraSizeMax - CameraSizeMin) * 0.0001f);
+    Zoom(mZoomFactor + (CameraSizeMax - CameraSizeMin) * ZoomMultiplierForButton);
   }
 
   public void ZoomOut()
   {
-    Zoom(mZoomFactor - (CameraSizeMax - CameraSizeMin) * 0.0001f);
+    Zoom(mZoomFactor - (CameraSizeMax - CameraSizeMin) * ZoomMultiplierForButton);
   }
 }

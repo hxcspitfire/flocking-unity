@@ -448,7 +448,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &1170169437
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -846,8 +846,8 @@ MonoBehaviour:
   MinX: -100
   MaxX: 100
   MinY: 100
-  MaxY: 100
+  MaxY: 10
   MinZ: -100
   MaxZ: 100
-  Count: 10000
+  Count: 50000
   Prefab: {fileID: 361222845814583162, guid: 5446722da0cf4b54e91af9532618beb6, type: 3}

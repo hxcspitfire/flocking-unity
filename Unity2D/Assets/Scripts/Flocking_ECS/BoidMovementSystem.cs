@@ -11,6 +11,7 @@ using Unity.Transforms;
 public partial class BoidMovementSystem : SystemBase
 {
   // OnUpdate runs on the main thread.
+  [BurstCompile]
   protected override void OnUpdate()
   {
     var deltaTime = Time.DeltaTime;

@@ -49,9 +49,9 @@ public partial class SpawnerSystem_FromEntity : SystemBase
           {
             var instance = commandBuffer.Instantiate(entityInQueryIndex, spawnerFromEntity.Prefab);
 
-            float posx = 0.0f;// rnd.NextFloat(spawnerFromEntity.MinX, spawnerFromEntity.MaxX);
-            float posy = 20.0f;// rnd.NextFloat(spawnerFromEntity.MinY, spawnerFromEntity.MaxY);
-            float posz = 0.0f;// rnd.NextFloat(spawnerFromEntity.MinZ, spawnerFromEntity.MaxZ);
+            float posx = rnd.NextFloat(spawnerFromEntity.MinX, spawnerFromEntity.MaxX);
+            float posy = rnd.NextFloat(spawnerFromEntity.MinY, spawnerFromEntity.MaxY);
+            float posz = rnd.NextFloat(spawnerFromEntity.MinZ, spawnerFromEntity.MaxZ);
 
             // Place the instantiated in a grid with some noise
             var position = math.transform(
